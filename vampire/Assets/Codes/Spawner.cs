@@ -7,27 +7,23 @@ public class Spawner : MonoBehaviour
     
     void Awake()
     {
-        spawnPoints = GETComponentsInChildren<Transform>();
+        spawnPoints = GetComponentsInChildren<Transform>();
     }
     void Update()
     {
         timer += Time.deltaTime;
 
-        if(timer > 0.2f)
+        if(timer > 0.8f)
         {
             GameManager.instance.pool.Get(1);
             timer = 0;
             Spawn();
         }
-        // if(Input.GetKeyDown(KeyCode.Space))
-        // {
-        //     GameManager.instance.pool.Get(0);   
-        // }
     }
     void Spawn()
     {
         GameObject enemy = GameManager.instance.pool.Get(Random.Range(0, 2));
-        enemy.transform.position = spawnPoints[Random.Range(0, spawnPoints.Length)].position;
+        enemy.transform.position = spawnPoints[Random.Range(1, spawnPoints.Length)].position;
 
     }
 }
