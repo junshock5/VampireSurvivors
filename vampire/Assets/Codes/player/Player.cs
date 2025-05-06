@@ -4,6 +4,7 @@ public class Player : MonoBehaviour
 {
     public Vector2 inputVector;    
     public float speed;
+    public Scanner scanner;
     SpriteRenderer spriteRenderer;
     Animator animator;
 
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        scanner = GetComponent<Scanner>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created    

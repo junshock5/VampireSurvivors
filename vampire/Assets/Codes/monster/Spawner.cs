@@ -14,9 +14,15 @@ public class Spawner : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        level = Mathf.Min(Mathf.FloorToInt(GameManager.instance.gameTime / 10f), spawnPoints.Length-1);
 
-        if(timer > spwanDatas[level].spawnTime)
+        // level 값을 spawnPoints.Length와 spwanDatas.Length의 범위 내로 제한
+        level = Mathf.Clamp(
+            Mathf.FloorToInt(GameManager.instance.gameTime / 10f),
+            0,
+            Mathf.Min(spawnPoints.Length - 1, spwanDatas.Length - 1)
+        );
+
+        if (timer > spwanDatas[level].spawnTime)
         {
             timer = 0;
             Spawn();
@@ -25,8 +31,11 @@ public class Spawner : MonoBehaviour
     void Spawn()
     {
         GameObject enemy = GameManager.instance.pool.Get(Random.Range(0, 2));
-        enemy.transform.position = spawnPoints[Random.Range(1, spawnPoints.Length)].position;
-        enemy.GetComponent<Enemy>().Init(spwanDatas[level]);
+        if (enemy.CompareTag("Enemy"))
+        {
+            enemy.transform.position = spawnPoints[Random.Range(1, spawnPoints.Length)].position;
+            enemy.GetComponent<Enemy>().Init(spwanDatas[level]);
+        }
 
     }
 }
