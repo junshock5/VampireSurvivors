@@ -10,6 +10,8 @@ public class Item : MonoBehaviour
 
     Image icon;
     Text textLevel;
+    Text textName;
+    Text textDescription;
     void Awake()
     {
         icon = GetComponentsInChildren<Image>()[1];
@@ -17,7 +19,30 @@ public class Item : MonoBehaviour
 
         Text[] texts = GetComponentsInChildren<Text>();
         textLevel = texts[0];
+        textName = texts[1];
+        textDescription = texts[2];
+        textName.text = data.itemName;
     }
+
+    void OnEnable()
+    {
+        textLevel.text = string.Format("Lv.{0}", level+1);
+        switch (data.itemType){
+            case ItemData.ItemType.Melee:
+            case ItemData.ItemType.Ranged:
+                textDescription.text = string.Format(data.itemDescription, data.damages[level] * 100, data.counts[level]);
+                break;
+            case ItemData.ItemType.Glove:
+            case ItemData.ItemType.Shoe:
+                textDescription.text = string.Format(data.itemDescription, data.damages[level] * 100);
+                break;
+            default:
+                textDescription.text = string.Format(data.itemDescription);
+                break;
+        }
+    }
+
+
 
     void LateUpdate()
     {

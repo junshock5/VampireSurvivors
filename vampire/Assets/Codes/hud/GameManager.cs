@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    // 12강 26분22초시간 컨트롤
+
     [Header("# game control")]
+    public bool isLive;
     public float gameTime;
     public float maxGameTime =20f;
 
@@ -20,6 +23,7 @@ public class GameManager : MonoBehaviour
     public Player player;
     //public Player player2;
     public PoolManager pool;
+    public LevelUp levelUp;
 
     void Awake()
     {
@@ -28,10 +32,15 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         health = maxHealth;
+
+        // 임시
+        levelUp.Select(0);
     }
 
     void Update()
     {
+        if (!isLive)
+            return;
         gameTime += Time.deltaTime;
 
         if (gameTime > maxGameTime)
@@ -42,9 +51,20 @@ public class GameManager : MonoBehaviour
     
     public void GetExp(){
         exp++;
-        if(exp >= nextExp[level]){
+        if(exp >= nextExp[Mathf.Min(level, nextExp.Length - 1)]){
             level++;
             exp = 0;
+            levelUp.Show();
         }
     }
+
+        public void Stop(){
+            isLive = false;
+            Time.timeScale = 0;
+        }
+
+        public void Resume(){
+            isLive = true;
+            Time.timeScale = 1;
+        }
 }

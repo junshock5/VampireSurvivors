@@ -29,6 +29,9 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(!GameManager.instance.isLive)
+            return;
+
         if (!isLive || animator.GetCurrentAnimatorStateInfo(0).IsName("Hit"))
             return;
         // 방향 = 위치 차이의 정규화 * 속도 * 시간 // normalized 피타고라스 대각선만큼 더가는걸 방지
@@ -39,6 +42,8 @@ public class Enemy : MonoBehaviour
 
     void LateUpdate()
     {
+        if(!GameManager.instance.isLive)
+            return;
         if (!isLive)
             return;
         spriteRenderer.flipX = target.position.x < rigid.position.x;

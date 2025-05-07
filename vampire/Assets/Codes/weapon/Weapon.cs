@@ -21,6 +21,9 @@ public class Weapon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!GameManager.instance.isLive)
+            return;
+
         switch (id)
         {
             case 0:
@@ -45,7 +48,7 @@ public class Weapon : MonoBehaviour
     public void LevelUp(float damange, int count)
     {
         this.damage = damange;
-        this.count = count;
+        this.count += count;
         if(id == 0)
         {
             Batch();
@@ -86,6 +89,11 @@ public class Weapon : MonoBehaviour
                 break;
         }
         
+        // hand set
+        Hand hand = player.hands[(int)data.itemType];
+        hand.spriteRenderer.sprite = data.hand;
+        hand.gameObject.SetActive(true);
+
         player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }
 

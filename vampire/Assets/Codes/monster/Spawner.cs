@@ -13,6 +13,8 @@ public class Spawner : MonoBehaviour
     }
     void Update()
     {
+        if(!GameManager.instance.isLive)
+            return;
         timer += Time.deltaTime;
 
         // level 값을 spawnPoints.Length와 spwanDatas.Length의 범위 내로 제한
@@ -30,7 +32,7 @@ public class Spawner : MonoBehaviour
     }
     void Spawn()
     {
-        GameObject enemy = GameManager.instance.pool.Get(Random.Range(0, 2));
+        GameObject enemy = GameManager.instance.pool.Get(Random.Range(0, 1));
         if (enemy.CompareTag("Enemy"))
         {
             enemy.transform.position = spawnPoints[Random.Range(1, spawnPoints.Length)].position;
