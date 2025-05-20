@@ -30,7 +30,8 @@ public class Item : MonoBehaviour
         switch (data.itemType){
             case ItemData.ItemType.Melee:
             case ItemData.ItemType.Ranged:
-                textDescription.text = string.Format(data.itemDescription, data.damages[level] * 100, data.counts[level]);
+                 if (level < data.damages.Length && level < data.counts.Length)
+                    textDescription.text = string.Format(data.itemDescription, data.damages[level] * 100, data.counts[level]);
                 break;
             case ItemData.ItemType.Glove:
             case ItemData.ItemType.Shoe:

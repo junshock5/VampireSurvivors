@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     Animator animator;
 
     public Hand[] hands; // 손의 배열
+    public RuntimeAnimatorController[] animators; // 애니메이터 컨트롤러 배열
 
     // 캐릭터 이동방법 3가지
     // 1. Transform.Translate
@@ -23,6 +24,12 @@ public class Player : MonoBehaviour
         animator = GetComponent<Animator>();
         scanner = GetComponent<Scanner>();
         hands = GetComponentsInChildren<Hand>(true); // 자식 오브젝트에서 Hand 컴포넌트를 가진 모든 오브젝트를 가져옴
+    }
+
+    void OnEnable()
+    {
+        speed *= Character.Speed; // 캐릭터의 속도를 설정
+        animator.runtimeAnimatorController = animators[GameManager.instance.playerId];
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created    
@@ -60,4 +67,22 @@ public class Player : MonoBehaviour
             spriteRenderer.flipX = inputVector.x < 0;
         }
     }   
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (!GameManager.instance.isLive)
+            return;
+
+        GameManager.instance.health -= Time.deltaTime * 10;
+
+            if (GameManager.instance.health < 0)
+            {
+                for(int index=2; index < transform.childCount; index++)
+                {
+                    transform.GetChild(index).gameObject.SetActive(false);
+                }
+                animator.SetTrigger("Dead");
+                GameManager.instance.GameVictory();
+            }
+    }
 }

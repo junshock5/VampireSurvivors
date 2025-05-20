@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -7,11 +9,12 @@ public class GameManager : MonoBehaviour
     [Header("# game control")]
     public bool isLive;
     public float gameTime;
-    public float maxGameTime =20f;
+    public float maxGameTime = 20f;
 
     [Header("# player info")]
-    public int maxHealth = 100;
-    public int health;
+    public int playerId;
+    public float maxHealth = 100;
+    public float health;
     public int level;
     public int kill;
     public int exp;
@@ -24,47 +27,82 @@ public class GameManager : MonoBehaviour
     //public Player player2;
     public PoolManager pool;
     public LevelUp levelUp;
+    public Result uiResult;
+    
+    public GameObject enemyCleaner;
 
     void Awake()
     {
         instance = this;
     }
-    void Start()
+    public void GameStart(int id)
     {
+        playerId = id;
         health = maxHealth;
 
-        // 임시
-        levelUp.Select(0);
+        player.gameObject.SetActive(true);
+        levelUp.Select(playerId % 2); // 플레이어 아이템 선택
+        Resume();
+    }
+
+    public void GameVictory()
+    {
+        StartCoroutine(GameVictoryRoutine());
+    }
+
+    IEnumerator GameVictoryRoutine()
+    {
+        isLive = false;
+        enemyCleaner.SetActive(true);
+
+        yield return new WaitForSeconds(0.5f);
+        uiResult.gameObject.SetActive(true);
+        uiResult.Win();
+
+        Stop();
+    }
+    public void GameRetry()
+    {
+        SceneManager.LoadScene(1);
+        //GameOver();
     }
 
     void Update()
     {
         if (!isLive)
             return;
+
         gameTime += Time.deltaTime;
 
         if (gameTime > maxGameTime)
         {
             gameTime = maxGameTime;
+            GameVictory();
         }
     }
-    
-    public void GetExp(){
+
+    public void GetExp()
+    {
+        if(isLive == false)
+            return;
         exp++;
-        if(exp >= nextExp[Mathf.Min(level, nextExp.Length - 1)]){
+        if (exp >= nextExp[Mathf.Min(level, nextExp.Length - 1)])
+        {
             level++;
             exp = 0;
             levelUp.Show();
         }
     }
 
-        public void Stop(){
-            isLive = false;
-            Time.timeScale = 0;
-        }
+    public void Stop()
+    {
+        isLive = false;
+        Time.timeScale = 0;
+    }
 
-        public void Resume(){
-            isLive = true;
-            Time.timeScale = 1;
-        }
+    public void Resume()
+    {
+        isLive = true;
+        Time.timeScale = 1;
+    }
 }
