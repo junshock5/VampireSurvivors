@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     public PoolManager pool;
     public LevelUp levelUp;
     public Result uiResult;
-    
+
     public GameObject enemyCleaner;
 
     void Awake()
@@ -43,6 +43,27 @@ public class GameManager : MonoBehaviour
         player.gameObject.SetActive(true);
         levelUp.Select(playerId % 2); // 플레이어 아이템 선택
         Resume();
+
+        AudioManager.instance.PlaySfx(AudioManager.SfxType.Select);
+        AudioManager.instance.PlayBgm(true);
+    }
+
+    public void GameOver()
+    {
+        StartCoroutine(GameOverRoutine());
+    }
+    IEnumerator GameOverRoutine()
+    {
+        isLive = false;
+        enemyCleaner.SetActive(true);
+
+        yield return new WaitForSeconds(0.5f);
+        uiResult.gameObject.SetActive(true);
+        uiResult.Lose();
+
+        Stop();
+        AudioManager.instance.EffectBgm(false);
+        AudioManager.instance.PlaySfx(AudioManager.SfxType.Lose);
     }
 
     public void GameVictory()
@@ -60,6 +81,9 @@ public class GameManager : MonoBehaviour
         uiResult.Win();
 
         Stop();
+
+        AudioManager.instance.EffectBgm(false);
+        AudioManager.instance.PlaySfx(AudioManager.SfxType.Win);
     }
     public void GameRetry()
     {
@@ -83,7 +107,7 @@ public class GameManager : MonoBehaviour
 
     public void GetExp()
     {
-        if(isLive == false)
+        if (isLive == false)
             return;
         exp++;
         if (exp >= nextExp[Mathf.Min(level, nextExp.Length - 1)])

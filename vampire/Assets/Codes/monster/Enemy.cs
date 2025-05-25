@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour
         // 방향 = 위치 차이의 정규화 * 속도 * 시간 // normalized 피타고라스 대각선만큼 더가는걸 방지
         Vector2 nextVector = (target.position - rigid.position).normalized * speed * Time.fixedDeltaTime;
         rigid.MovePosition(rigid.position + nextVector);
-        
+
         rigid.linearVelocity = Vector2.zero;
     }
 
@@ -83,7 +83,7 @@ public class Enemy : MonoBehaviour
             if (health > 0)
             {
                 animator.SetTrigger("Hit");
-
+                AudioManager.instance.PlaySfx(AudioManager.SfxType.Hit);
             }
             else
             {
@@ -95,6 +95,8 @@ public class Enemy : MonoBehaviour
                 GameManager.instance.GetExp();
                 GameManager.instance.kill++;
 
+                if(GameManager.instance.isLive)
+                    AudioManager.instance.PlaySfx(AudioManager.SfxType.Dead);
             }
         }
     }

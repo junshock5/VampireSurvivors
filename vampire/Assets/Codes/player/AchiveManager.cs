@@ -88,6 +88,8 @@ public class AchiveManager : MonoBehaviour
         foreach (GameObject notice in uiNotice)
         {
             notice.SetActive(true); // 배열의 각 요소에 대해 SetActive 호출
+
+        AudioManager.instance.PlaySfx(AudioManager.SfxType.LevelUp);
         }
 
         yield return wait;
