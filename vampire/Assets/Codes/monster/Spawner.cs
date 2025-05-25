@@ -5,11 +5,13 @@ public class Spawner : MonoBehaviour
     int level;
     public Transform[] spawnPoints;
     public SpawnData[] spwanDatas;
+    public float levelTime;
     float timer;
     
     void Awake()
     {
         spawnPoints = GetComponentsInChildren<Transform>();
+        levelTime = GameManager.instance.maxGameTime / spwanDatas.Length;
     }
     void Update()
     {
@@ -19,7 +21,7 @@ public class Spawner : MonoBehaviour
 
         // level 값을 spawnPoints.Length와 spwanDatas.Length의 범위 내로 제한
         level = Mathf.Clamp(
-            Mathf.FloorToInt(GameManager.instance.gameTime / 10f),
+            Mathf.FloorToInt(GameManager.instance.gameTime / levelTime),
             0,
             Mathf.Min(spawnPoints.Length - 1, spwanDatas.Length - 1)
         );

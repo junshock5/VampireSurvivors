@@ -117,7 +117,7 @@ public class Weapon : MonoBehaviour
             Vector3 rotVeC = Vector3.forward * 360 * i / count;
             bullet.Rotate(rotVeC);
             bullet.Translate(bullet.up * 1.5f, Space.World);
-            bullet.GetComponent<Bullet>().Init(damage, -1, Vector3.zero); // -1은 플레이어 총알
+            bullet.GetComponent<Bullet>().Init(damage, -100, Vector3.zero); // -100은 플레이어 총알
         }
     }
 
