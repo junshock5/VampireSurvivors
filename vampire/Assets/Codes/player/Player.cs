@@ -38,8 +38,8 @@ public class Player : MonoBehaviour
         if(!GameManager.instance.isLive)
             return;
         
-        inputVector.x = Input.GetAxisRaw("Horizontal");
-        inputVector.y = Input.GetAxisRaw("Vertical");
+        // inputVector.x = Input.GetAxisRaw("Horizontal");
+        // inputVector.y = Input.GetAxisRaw("Vertical");
     }
 
     void FixedUpdate()

@@ -28,12 +28,14 @@ public class GameManager : MonoBehaviour
     public PoolManager pool;
     public LevelUp levelUp;
     public Result uiResult;
+    public Transform uiJoy;
 
     public GameObject enemyCleaner;
 
     void Awake()
     {
         instance = this;
+        Application.targetFrameRate = 60; // 프레임 레이트 설정 
     }
     public void GameStart(int id)
     {
@@ -91,6 +93,11 @@ public class GameManager : MonoBehaviour
         //GameOver();
     }
 
+    public void GameQuit()
+    {
+        Application.Quit();
+    }
+
     void Update()
     {
         if (!isLive)
@@ -122,11 +129,16 @@ public class GameManager : MonoBehaviour
     {
         isLive = false;
         Time.timeScale = 0;
+        uiJoy.localScale = Vector3.zero; // 조이스틱 숨김
     }
 
     public void Resume()
     {
         isLive = true;
         Time.timeScale = 1;
+        uiJoy.localScale = Vector3.one; // 조이스틱 보임
     }
+
+
+    // 10분 내 캐릭터는 왜안움직여?
 }
